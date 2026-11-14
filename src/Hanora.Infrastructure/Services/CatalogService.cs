@@ -497,8 +497,26 @@ public sealed class CatalogService(
         return ServiceResult<bool>.Success(true);
     }
 
-    public static string? BuildImageUrl(string? imagePath) =>
-        string.IsNullOrWhiteSpace(imagePath) ? null : $"/media/{imagePath}";
+    public static string? BuildImageUrl(string? imagePath)
+    {
+        if (string.IsNullOrWhiteSpace(imagePath))
+        {
+            return null;
+        }
+
+        var value = imagePath.Trim();
+
+        // Mendukung gambar lokal (/media/...) dan URL absolut (misalnya CDN)
+        // agar data demo dapat memakai foto online tanpa mengubah kontrak API.
+        if (Uri.TryCreate(value, UriKind.Absolute, out var uri) &&
+            (uri.Scheme == Uri.UriSchemeHttp ||
+             uri.Scheme == Uri.UriSchemeHttps))
+        {
+            return value;
+        }
+
+        return $"/media/{value.TrimStart('/')}";
+    }
 
     private async Task<string> GenerateUniqueCategorySlugAsync(
         string source,
