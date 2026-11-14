@@ -1,0 +1,27 @@
+# .NET build output
+**/bin/
+**/obj/
+TestResults/
+coverage/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Runtime
+**/logs/
+**/uploads/
+
+# Secrets / environment
+**/.env
+**/.env.*
+!**/.env.example
+**/appsettings.Production.json
+
+# OS
+.DS_Store
+Thumbs.db
